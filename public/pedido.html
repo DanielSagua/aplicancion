@@ -1,0 +1,70 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Pedido</title>
+    <link href="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css" rel="stylesheet">
+</head>
+
+<body>
+    <div class="container">
+        <h1 id="mesaTitle">Pedido</h1>
+        <button type="button" class="btn btn-primary" onclick="openMenu()">Acceder al Menú</button>
+        <div id="pedidoDetalle" class="mt-4">
+            <h2>Detalle del Pedido</h2>
+            <ul id="pedidoList" class="list-group"></ul>
+        </div>
+        <button type="button" class="btn btn-success mt-3" onclick="enviarPedido()">Enviar Pedido</button>
+        <button type="button" class="btn btn-primary mt-3" onclick="volverUsuario()">Volver</button>
+        <button type="button" class="btn btn-info mt-3" onclick="pagar()">Pagar</button>
+    </div>
+
+    <script>
+        const params = new URLSearchParams(window.location.search);
+        const nombreMesa = localStorage.getItem('mesaSeleccionada');
+        if (nombreMesa) {
+            document.getElementById('mesaTitle').innerText = `Pedido para ${nombreMesa}`;
+        }
+
+        function openMenu() {
+            window.location.href = 'menu.html';
+        }
+
+        function cargarPedido() {
+            const pedido = JSON.parse(localStorage.getItem('pedido')) || [];
+            const pedidoList = document.getElementById('pedidoList');
+            pedidoList.innerHTML = '';
+            pedido.forEach(plato => {
+                const listItem = document.createElement('li');
+                listItem.className = 'list-group-item';
+                listItem.innerText = `${plato.nombre} - $${plato.precio}`;
+                pedidoList.appendChild(listItem);
+            });
+        }
+
+        function enviarPedido() {
+            localStorage.removeItem('pedido');
+            localStorage.removeItem('mesaSeleccionada');
+            window.location.href = 'usuario.html';
+        }
+
+        function volverUsuario() {
+            window.location.href = 'usuario.html';
+        }
+
+        function pagar() {
+            const pedido = JSON.parse(localStorage.getItem('pedido')) || [];
+            const queryParams = new URLSearchParams();
+            pedido.forEach((plato, index) => {
+                queryParams.append(`plato${index}`, `${plato.nombre}: $${plato.precio}`);
+            });
+            window.location.href = `pagar.html?${queryParams.toString()}`;
+        }
+
+        cargarPedido();
+    </script>
+</body>
+
+</html>

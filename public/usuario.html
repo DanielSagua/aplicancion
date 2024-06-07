@@ -1,0 +1,43 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Usuario Page</title>
+    <link href="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css" rel="stylesheet">
+</head>
+
+<body>
+    <div class="container">
+        <h1>Welcome, User!</h1>
+        <h2>Seleccione una mesa:</h2>
+        <div class="row">
+            <div class="col-3">
+                <button type="button" class="btn btn-primary btn-lg btn-block" onclick="openPedido('Mesa 1')">Mesa
+                    1</button>
+            </div>
+            <div class="col-3">
+                <button type="button" class="btn btn-primary btn-lg btn-block" onclick="openPedido('Mesa 2')">Mesa
+                    2</button>
+            </div>
+            <div class="col-3">
+                <button type="button" class="btn btn-primary btn-lg btn-block" onclick="openPedido('Mesa 3')">Mesa
+                    3</button>
+            </div>
+            <div class="col-3">
+                <button type="button" class="btn btn-primary btn-lg btn-block" onclick="openPedido('Mesa 4')">Mesa
+                    4</button>
+            </div>
+        </div>
+    </div>
+
+    <script>
+        function openPedido(nombreMesa) {
+            localStorage.setItem('mesaSeleccionada', nombreMesa); // Guardar el nombre de la mesa en localStorage
+            window.location.href = 'pedido.html?mesa=' + encodeURIComponent(nombreMesa);
+        }
+    </script>
+</body>
+
+</html>

@@ -1,0 +1,51 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Pagar</title>
+    <link href="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css" rel="stylesheet">
+</head>
+
+<body>
+    <div class="container">
+        <h1>Detalle del Pedido</h1>
+        <ul id="detallePedidoList" class="list-group"></ul>
+        <h2>Total a Pagar: <span id="totalPagar"></span></h2>
+        <button type="button" class="btn btn-primary" onclick="volverPedido()">Volver</button>
+        <button type="button" class="btn btn-success ml-2" onclick="confirmarPago()">Confirmar Pago</button>
+    </div>
+
+    <script>
+        window.onload = function () {
+            const queryParams = new URLSearchParams(window.location.search);
+            const detallePedidoList = document.getElementById('detallePedidoList');
+            let totalPagar = 0;
+
+            queryParams.forEach((platoPrecio, platoNombre) => {
+                const listItem = document.createElement('li');
+                listItem.className = 'list-group-item';
+                listItem.innerText = `${platoNombre}: ${platoPrecio}`;
+                detallePedidoList.appendChild(listItem);
+
+                const precio = parseInt(platoPrecio.split(':')[1].trim().replace('$', ''));
+                totalPagar += precio;
+            });
+
+            document.getElementById('totalPagar').innerText = `$${totalPagar}`;
+        };
+
+        function volverPedido() {
+            window.location.href = 'pedido.html';
+        }
+
+        function confirmarPago() {
+            localStorage.removeItem('pedido');
+            localStorage.removeItem('mesaSeleccionada');
+            window.location.href = 'usuario.html';
+        }
+    </script>
+</body>
+
+</html>

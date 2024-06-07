@@ -1,0 +1,102 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Menú</title>
+    <link href="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css" rel="stylesheet">
+</head>
+
+<body>
+    <div class="container">
+        <h1>Menú</h1>
+        <div class="row">
+            <div class="col-md-8">
+                <div id="menuPlatos" class="row"></div>
+            </div>
+            <div class="col-md-4">
+                <h2>Pedido</h2>
+                <ul id="pedidoList" class="list-group"></ul>
+                <button type="button" class="btn btn-primary mt-3" onclick="confirmarPedido()">Confirmar Pedido</button>
+            </div>
+        </div>
+    </div>
+
+    <script>
+        window.onload = async function () {
+            try {
+                const response = await fetch('/getPlatos');
+                const platos = await response.json();
+                displayPlatos(platos);
+            } catch (error) {
+                console.error('Error:', error);
+                alert('Error al obtener el menú');
+            }
+        };
+
+        function displayPlatos(platos) {
+            const menuPlatosDiv = document.getElementById('menuPlatos');
+            if (platos.length === 0) {
+                menuPlatosDiv.innerHTML = '<p>No hay platos disponibles</p>';
+                return;
+            }
+            platos.forEach(plato => {
+                const card = document.createElement('div');
+                card.className = 'col-md-4';
+                card.innerHTML = `
+          <div class="card mb-4">
+            <div class="card-body">
+              <h5 class="card-title">${plato.nombre_plato}</h5>
+              <p class="card-text">${plato.descripcion_plato}</p>
+              <p class="card-text"><strong>Tipo:</strong> ${plato.tipo_plato}</p>
+              <p class="card-text"><strong>Precio:</strong> $${plato.precio_plato}</p>
+              <button class="btn btn-primary" onclick="agregarAlPedido(${plato.id_plato}, '${plato.nombre_plato}', ${plato.precio_plato})">Agregar</button>
+            </div>
+          </div>
+        `;
+                menuPlatosDiv.appendChild(card);
+            });
+        }
+
+        function agregarAlPedido(id, nombre, precio) {
+            const pedido = JSON.parse(localStorage.getItem('pedido')) || [];
+            pedido.push({ id, nombre, precio });
+            localStorage.setItem('pedido', JSON.stringify(pedido));
+            actualizarPedidoList();
+        }
+
+        function eliminarDelPedido(index) {
+            const pedido = JSON.parse(localStorage.getItem('pedido')) || [];
+            pedido.splice(index, 1);
+            localStorage.setItem('pedido', JSON.stringify(pedido));
+            actualizarPedidoList();
+        }
+
+        function actualizarPedidoList() {
+            const pedido = JSON.parse(localStorage.getItem('pedido')) || [];
+            const pedidoList = document.getElementById('pedidoList');
+            pedidoList.innerHTML = '';
+            pedido.forEach((plato, index) => {
+                const listItem = document.createElement('li');
+                listItem.className = 'list-group-item d-flex justify-content-between align-items-center';
+                listItem.innerText = `${plato.nombre} - $${plato.precio}`;
+                const deleteButton = document.createElement('button');
+                deleteButton.className = 'btn btn-danger btn-sm';
+                deleteButton.innerText = 'Eliminar';
+                deleteButton.onclick = () => eliminarDelPedido(index);
+                listItem.appendChild(deleteButton);
+                pedidoList.appendChild(listItem);
+            });
+        }
+
+        function confirmarPedido() {
+            const nombreMesa = localStorage.getItem('mesaSeleccionada'); // Obtener el nombre de la mesa de localStorage
+            window.location.href = 'pedido.html?mesa=' + encodeURIComponent(nombreMesa);
+        }
+
+        actualizarPedidoList();
+    </script>
+</body>
+
+</html>

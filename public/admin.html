@@ -1,0 +1,38 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Admin Page</title>
+    <link href="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css" rel="stylesheet">
+</head>
+
+<body>
+    <div class="container">
+        <h1>Welcome, Admin!</h1>
+        <h2>Menu:</h2>
+        <div class="row">
+            <div class="col">
+                <button type="button" class="btn btn-primary btn-lg btn-block"
+                    onclick="openPage('usuario.html')">Mesero</button>
+            </div>
+            <div class="col">
+                <button type="button" class="btn btn-primary btn-lg btn-block"
+                    onclick="openPage('adminUser.html')">Administrar Usuarios</button>
+            </div>
+            <div class="col">
+                <button type="button" class="btn btn-primary btn-lg btn-block" onclick="openPage('#')">Administrar
+                    Menú</button>
+            </div>
+        </div>
+    </div>
+    <input type="button" onclick="history.back()" name="volver atrás" value="volver atrás">
+    <script>
+        function openPage(page) {
+            window.location.href = page;
+        }
+    </script>
+</body>
+
+</html>

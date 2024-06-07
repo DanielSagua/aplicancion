@@ -1,0 +1,47 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Ver Usuarios</title>
+    <link href="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css" rel="stylesheet">
+</head>
+
+<body>
+    <div class="container">
+        <h1>Ver Usuarios</h1>
+        <div id="userList"></div>
+    </div>
+
+    <script>
+        window.onload = async function () {
+            try {
+                const response = await fetch('/getUsers');
+                const users = await response.json();
+                displayUsers(users);
+            } catch (error) {
+                console.error('Error:', error);
+                alert('Error al obtener la lista de usuarios');
+            }
+        };
+
+        function displayUsers(users) {
+            const userListDiv = document.getElementById('userList');
+            if (users.length === 0) {
+                userListDiv.innerHTML = '<p>No hay usuarios</p>';
+                return;
+            }
+            let html = '<table class="table"><thead><tr><th>Nombre de Usuario</th><th>Tipo de Usuario</th></tr></thead><tbody>';
+            users.forEach(user => {
+                html += `<tr><td>${user.nombre_usuario}</td><td>${user.tipo_usuario}</td></tr>`;
+            });
+            html += '</tbody></table>';
+            userListDiv.innerHTML = html;
+        }
+    </script>
+
+<input type="button" onclick="history.back()" name="volver atrás" value="volver atrás">
+</body>
+
+</html>
